@@ -61,15 +61,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void _updateMistake(Mistake original, Mistake updated) {
-    setState(() {
-      final index = _mistakes.indexOf(original);
-      if (index != -1) {
-        _mistakes[index] = updated;
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

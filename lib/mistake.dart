@@ -1,9 +1,9 @@
 class Mistake {
-  final String title;
-  final String trigger;
-  final String consequence;
-  final String solution;
-  final String category;
+  String title;
+  String trigger;
+  String consequence;
+  String solution;
+  String category;
   final DateTime createdAt;
   int occurrenceCount;
   bool isResolved;
