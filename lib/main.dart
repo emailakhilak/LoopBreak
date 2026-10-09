@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'widgets/mistake_card.dart';
+import 'screens/add_mistake_screen.dart';
 void main() {
   runApp(const LoopBreakApp());
 }
@@ -131,7 +132,14 @@ class HomeScreen extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: FilledButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AddMistakeScreen(),
+                  ),
+                );
+              },
               icon: const Icon(Icons.add),
               label: const Text('Log a mistake'),
             ),
