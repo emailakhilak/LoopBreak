@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'widgets/mistake_card.dart';
 void main() {
   runApp(const LoopBreakApp());
 }
@@ -121,19 +121,10 @@ class HomeScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           ...mistakes.map(
-                (mistake) => Card(
-              margin: const EdgeInsets.only(bottom: 12),
-              child: ListTile(
-                leading: const CircleAvatar(
-                  child: Icon(Icons.psychology_outlined),
-                ),
-                title: Text(mistake['title']!),
-                subtitle: Text(
-                  '${mistake['category']}\nTrigger: ${mistake['trigger']}',
-                ),
-                isThreeLine: true,
-                trailing: const Icon(Icons.chevron_right),
-              ),
+                (mistake) => MistakeCard(
+              title: mistake['title']!,
+              category: mistake['category']!,
+              trigger: mistake['trigger']!,
             ),
           ),
           const SizedBox(height: 16),
