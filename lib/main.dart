@@ -55,6 +55,30 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
   ];
 
+  final TextEditingController _searchController = TextEditingController();
+  String _selectedCategory = 'All';
+
+  List<Mistake> get _filteredMistakes {
+    return _mistakes.where((mistake) {
+      final query = _searchController.text.toLowerCase();
+
+      final matchesSearch =
+          mistake.title.toLowerCase().contains(query) ||
+              mistake.trigger.toLowerCase().contains(query);
+
+      final matchesCategory = _selectedCategory == 'All' ||
+          mistake.category == _selectedCategory;
+
+      return matchesSearch && matchesCategory;
+    }).toList();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   void _addMistake(Mistake mistake) {
     setState(() {
       _mistakes.insert(0, mistake);
@@ -101,14 +125,53 @@ class _HomeScreenState extends State<HomeScreen> {
                   .toSet()
                   .map(
                     (category) => Chip(
-                      label: Text(
-                        '$category: ${_mistakes.where((m) => m.category == category).length}',
-                      ),
-                    ),
-                  )
+                  label: Text(
+                    '$category: ${_mistakes.where((m) => m.category == category).length}',
+                  ),
+                ),
+              )
                   .toList(),
             ),
             const SizedBox(height: 16),
+            TextField(
+              controller: _searchController,
+              decoration: const InputDecoration(
+                hintText: 'Search mistakes...',
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(),
+              ),
+              onChanged: (_) => setState(() {}),
+            ),
+            const SizedBox(height: 12),
+            DropdownButtonFormField<String>(
+              initialValue: _selectedCategory,
+              decoration: const InputDecoration(
+                labelText: 'Filter category',
+                border: OutlineInputBorder(),
+              ),
+              items: [
+                'All',
+                'Productivity',
+                'Coding',
+                'Learning',
+                'Communication',
+                'Health',
+                'Finance',
+                'Relationships',
+                'Other',
+              ].map((category) {
+                return DropdownMenuItem(
+                  value: category,
+                  child: Text(category),
+                );
+              }).toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  setState(() => _selectedCategory = value);
+                }
+              },
+            ),
+            const SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -132,35 +195,35 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: _mistakes.isEmpty
+              child: _filteredMistakes.isEmpty
                   ? const Center(child: Text('No mistakes logged yet.'))
                   : ListView.builder(
-                      itemCount: _mistakes.length,
-                      itemBuilder: (context, index) {
-                        final mistake = _mistakes[index];
+                itemCount: _filteredMistakes.length,
+                itemBuilder: (context, index) {
+                  final mistake = _filteredMistakes[index];
 
-                        return MistakeCard(
-                          title: mistake.title,
-                          category: mistake.category,
-                          trigger: mistake.trigger,
-                          onTap: () async {
-                            final shouldDelete = await Navigator.push<bool>(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    MistakeDetailScreen(mistake: mistake),
-                              ),
-                            );
+                  return MistakeCard(
+                    title: mistake.title,
+                    category: mistake.category,
+                    trigger: mistake.trigger,
+                    onTap: () async {
+                      final shouldDelete = await Navigator.push<bool>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              MistakeDetailScreen(mistake: mistake),
+                        ),
+                      );
 
-                            if (shouldDelete == true && mounted) {
-                              setState(() {
-                                _mistakes.remove(mistake);
-                              });
-                            }
-                          },
-                        );
-                      },
-                    ),
+                      if (shouldDelete == true && mounted) {
+                        setState(() {
+                          _mistakes.remove(mistake);
+                        });
+                      }
+                    },
+                  );
+                },
+              ),
             ),
           ],
         ),
