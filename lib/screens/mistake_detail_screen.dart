@@ -77,6 +77,35 @@ class _MistakeDetailScreenState extends State<MistakeDetailScreen> {
             icon: const Icon(Icons.edit),
             label: const Text('Edit mistake'),
           ),
+          const SizedBox(height: 12),
+          OutlinedButton.icon(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (dialogContext) => AlertDialog(
+                  title: const Text('Delete mistake?'),
+                  content: const Text(
+                    'This action cannot be undone.',
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(dialogContext),
+                      child: const Text('Cancel'),
+                    ),
+                    FilledButton(
+                      onPressed: () {
+                        Navigator.pop(dialogContext);
+                        Navigator.pop(context, true);
+                      },
+                      child: const Text('Delete'),
+                    ),
+                  ],
+                ),
+              );
+            },
+            icon: const Icon(Icons.delete_outline),
+            label: const Text('Delete mistake'),
+          ),
         ],
       ),
     );

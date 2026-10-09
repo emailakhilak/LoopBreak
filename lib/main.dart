@@ -136,14 +136,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: mistake.title,
                     category: mistake.category,
                     trigger: mistake.trigger,
-                    onTap: () {
-                      Navigator.push(
+                    onTap: () async {
+                      final shouldDelete = await Navigator.push<bool>(
                         context,
                         MaterialPageRoute(
                           builder: (_) =>
                               MistakeDetailScreen(mistake: mistake),
                         ),
                       );
+
+                      if (shouldDelete == true && mounted) {
+                        setState(() {
+                          _mistakes.remove(mistake);
+                        });
+                      }
                     },
                   );
                 },
