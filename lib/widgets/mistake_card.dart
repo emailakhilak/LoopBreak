@@ -20,9 +20,7 @@ class MistakeCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
         onTap: onTap,
-        leading: const CircleAvatar(
-          child: Icon(Icons.psychology_outlined),
-        ),
+        leading: const CircleAvatar(child: Icon(Icons.psychology_outlined)),
         title: Text(title),
         subtitle: Text('$category\nTrigger: $trigger'),
         isThreeLine: true,

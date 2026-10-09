@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import '../mistake.dart';
 
 class AddMistakeScreen extends StatefulWidget {
-  const AddMistakeScreen({super.key});
+  final ValueChanged<Mistake> onSave;
+
+  const AddMistakeScreen({super.key, required this.onSave});
 
   @override
   State<AddMistakeScreen> createState() => _AddMistakeScreenState();
@@ -37,14 +40,17 @@ class _AddMistakeScreenState extends State<AddMistakeScreen> {
   void _saveMistake() {
     if (!_formKey.currentState!.validate()) return;
 
-
-    ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(
-    content: Text('Mistake details validated successfully!'),
-    ),
+    final mistake = Mistake(
+      title: _titleController.text.trim(),
+      trigger: _triggerController.text.trim(),
+      consequence: _consequenceController.text.trim(),
+      solution: _solutionController.text.trim(),
+      category: _category,
+      createdAt: DateTime.now(),
     );
 
-
+    widget.onSave(mistake);
+    Navigator.pop(context);
   }
 
   Widget _buildField({
@@ -84,10 +90,7 @@ class _AddMistakeScreenState extends State<AddMistakeScreen> {
           children: [
             const Text(
               'Understand what happened.',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             const Text('Every repeated mistake has a pattern.'),
@@ -116,7 +119,7 @@ class _AddMistakeScreenState extends State<AddMistakeScreen> {
               maxLines: 2,
             ),
             DropdownButtonFormField<String>(
-              value: _category,
+              initialValue: _category,
               decoration: const InputDecoration(
                 labelText: 'Category',
                 border: OutlineInputBorder(),
@@ -124,10 +127,10 @@ class _AddMistakeScreenState extends State<AddMistakeScreen> {
               items: _categories
                   .map(
                     (category) => DropdownMenuItem(
-                  value: category,
-                  child: Text(category),
-                ),
-              )
+                      value: category,
+                      child: Text(category),
+                    ),
+                  )
                   .toList(),
               onChanged: (value) {
                 if (value != null) {
