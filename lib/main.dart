@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'screens/mistake_detail_screen.dart';
 import 'mistake.dart';
 import 'screens/add_mistake_screen.dart';
 import 'widgets/mistake_card.dart';
@@ -127,6 +127,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           title: mistake.title,
                           category: mistake.category,
                           trigger: mistake.trigger,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    MistakeDetailScreen(mistake: mistake),
+                              ),
+                            );
+                          },
                         );
                       },
                     ),
