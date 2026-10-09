@@ -3,8 +3,13 @@ import '../mistake.dart';
 
 class AddMistakeScreen extends StatefulWidget {
   final ValueChanged<Mistake> onSave;
+  final Mistake? existingMistake;
 
-  const AddMistakeScreen({super.key, required this.onSave});
+  const AddMistakeScreen({
+    super.key,
+    required this.onSave,
+    this.existingMistake,
+  });
 
   @override
   State<AddMistakeScreen> createState() => _AddMistakeScreenState();
@@ -29,6 +34,20 @@ class _AddMistakeScreenState extends State<AddMistakeScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+
+    final mistake = widget.existingMistake;
+    if (mistake != null) {
+      _titleController.text = mistake.title;
+      _triggerController.text = mistake.trigger;
+      _consequenceController.text = mistake.consequence;
+      _solutionController.text = mistake.solution;
+      _category = mistake.category;
+    }
+  }
+
+  @override
   void dispose() {
     _titleController.dispose();
     _triggerController.dispose();
@@ -40,13 +59,17 @@ class _AddMistakeScreenState extends State<AddMistakeScreen> {
   void _saveMistake() {
     if (!_formKey.currentState!.validate()) return;
 
+    final existing = widget.existingMistake;
+
     final mistake = Mistake(
       title: _titleController.text.trim(),
       trigger: _triggerController.text.trim(),
       consequence: _consequenceController.text.trim(),
       solution: _solutionController.text.trim(),
       category: _category,
-      createdAt: DateTime.now(),
+      createdAt: existing?.createdAt ?? DateTime.now(),
+      occurrenceCount: existing?.occurrenceCount ?? 1,
+      isResolved: existing?.isResolved ?? false,
     );
 
     widget.onSave(mistake);
@@ -82,7 +105,13 @@ class _AddMistakeScreenState extends State<AddMistakeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Log a Mistake')),
+      appBar: AppBar(
+        title: Text(
+          widget.existingMistake == null
+              ? 'Log a Mistake'
+              : 'Edit Mistake',
+        ),
+      ),
       body: Form(
         key: _formKey,
         child: ListView(
@@ -127,10 +156,10 @@ class _AddMistakeScreenState extends State<AddMistakeScreen> {
               items: _categories
                   .map(
                     (category) => DropdownMenuItem(
-                      value: category,
-                      child: Text(category),
-                    ),
-                  )
+                  value: category,
+                  child: Text(category),
+                ),
+              )
                   .toList(),
               onChanged: (value) {
                 if (value != null) {

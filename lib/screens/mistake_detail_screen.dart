@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../mistake.dart';
+import 'add_mistake_screen.dart';
 
 class MistakeDetailScreen extends StatefulWidget {
   final Mistake mistake;
@@ -47,6 +48,34 @@ class _MistakeDetailScreenState extends State<MistakeDetailScreen> {
           _section(
             'Status',
             mistake.isResolved ? 'Resolved' : 'Needs improvement',
+          ),
+          const SizedBox(height: 12),
+          FilledButton.icon(
+            onPressed: () async {
+              final original = widget.mistake;
+
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => AddMistakeScreen(
+                    existingMistake: original,
+                    onSave: (updated) {
+                      original
+                        ..title = updated.title
+                        ..trigger = updated.trigger
+                        ..consequence = updated.consequence
+                        ..solution = updated.solution
+                        ..category = updated.category
+                        ..isResolved = updated.isResolved;
+                    },
+                  ),
+                ),
+              );
+
+              if (context.mounted) setState(() {});
+            },
+            icon: const Icon(Icons.edit),
+            label: const Text('Edit mistake'),
           ),
         ],
       ),

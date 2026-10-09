@@ -61,6 +61,15 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void _updateMistake(Mistake original, Mistake updated) {
+    setState(() {
+      final index = _mistakes.indexOf(original);
+      if (index != -1) {
+        _mistakes[index] = updated;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,26 +128,26 @@ class _HomeScreenState extends State<HomeScreen> {
               child: _mistakes.isEmpty
                   ? const Center(child: Text('No mistakes logged yet.'))
                   : ListView.builder(
-                      itemCount: _mistakes.length,
-                      itemBuilder: (context, index) {
-                        final mistake = _mistakes[index];
+                itemCount: _mistakes.length,
+                itemBuilder: (context, index) {
+                  final mistake = _mistakes[index];
 
-                        return MistakeCard(
-                          title: mistake.title,
-                          category: mistake.category,
-                          trigger: mistake.trigger,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    MistakeDetailScreen(mistake: mistake),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
+                  return MistakeCard(
+                    title: mistake.title,
+                    category: mistake.category,
+                    trigger: mistake.trigger,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              MistakeDetailScreen(mistake: mistake),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ],
         ),
