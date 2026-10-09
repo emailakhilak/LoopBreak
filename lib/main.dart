@@ -98,8 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(title: const Text('LoopBreak'), centerTitle: true),
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
           children: [
             Text(
               'Break the pattern.',
@@ -255,37 +254,37 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             const SizedBox(height: 16),
-            Expanded(
-              child: _filteredMistakes.isEmpty
-                  ? const Center(child: Text('No mistakes logged yet.'))
-                  : ListView.builder(
-                      itemCount: _filteredMistakes.length,
-                      itemBuilder: (context, index) {
-                        final mistake = _filteredMistakes[index];
+            _filteredMistakes.isEmpty
+                ? const Center(child: Text('No mistakes logged yet.'))
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _filteredMistakes.length,
+                    itemBuilder: (context, index) {
+                      final mistake = _filteredMistakes[index];
 
-                        return MistakeCard(
-                          title: mistake.title,
-                          category: mistake.category,
-                          trigger: mistake.trigger,
-                          onTap: () async {
-                            final shouldDelete = await Navigator.push<bool>(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    MistakeDetailScreen(mistake: mistake),
-                              ),
-                            );
+                      return MistakeCard(
+                        title: mistake.title,
+                        category: mistake.category,
+                        trigger: mistake.trigger,
+                        onTap: () async {
+                          final shouldDelete = await Navigator.push<bool>(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  MistakeDetailScreen(mistake: mistake),
+                            ),
+                          );
 
-                            if (shouldDelete == true && mounted) {
-                              setState(() {
-                                _mistakes.remove(mistake);
-                              });
-                            }
-                          },
-                        );
-                      },
-                    ),
-            ),
+                          if (shouldDelete == true && mounted) {
+                            setState(() {
+                              _mistakes.remove(mistake);
+                            });
+                          }
+                        },
+                      );
+                    },
+                  ),
           ],
         ),
       ),
