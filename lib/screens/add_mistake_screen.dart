@@ -30,6 +30,9 @@ class _AddMistakeScreenState extends State<AddMistakeScreen> {
     'Coding',
     'Learning',
     'Communication',
+    'Health',
+    'Finance',
+    'Relationships',
     'Other',
   ];
 
@@ -107,9 +110,7 @@ class _AddMistakeScreenState extends State<AddMistakeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.existingMistake == null
-              ? 'Log a Mistake'
-              : 'Edit Mistake',
+          widget.existingMistake == null ? 'Log a Mistake' : 'Edit Mistake',
         ),
       ),
       body: Form(
@@ -156,10 +157,10 @@ class _AddMistakeScreenState extends State<AddMistakeScreen> {
               items: _categories
                   .map(
                     (category) => DropdownMenuItem(
-                  value: category,
-                  child: Text(category),
-                ),
-              )
+                      value: category,
+                      child: Text(category),
+                    ),
+                  )
                   .toList(),
               onChanged: (value) {
                 if (value != null) {

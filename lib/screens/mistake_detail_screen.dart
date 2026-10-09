@@ -84,9 +84,7 @@ class _MistakeDetailScreenState extends State<MistakeDetailScreen> {
                 context: context,
                 builder: (dialogContext) => AlertDialog(
                   title: const Text('Delete mistake?'),
-                  content: const Text(
-                    'This action cannot be undone.',
-                  ),
+                  content: const Text('This action cannot be undone.'),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(dialogContext),
