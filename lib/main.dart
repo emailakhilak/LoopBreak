@@ -28,6 +28,27 @@ class LoopBreakApp extends StatelessWidget {
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
+  final List<Map<String, String>> mistakes = const [
+    {
+      'title': 'Started assignment too late',
+      'category': 'Productivity',
+      'trigger': 'Scrolling on my phone',
+      'solution': 'Start with a 10-minute session',
+    },
+    {
+      'title': 'Forgot to back up code',
+      'category': 'Coding',
+      'trigger': 'Making changes without committing',
+      'solution': 'Commit after every working feature',
+    },
+    {
+      'title': 'Repeated the same coding error',
+      'category': 'Learning',
+      'trigger': 'Skipping error analysis',
+      'solution': 'Write down the cause and fix',
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,88 +64,88 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
+      body: ListView(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'BREAK THE LOOP.',
-              style: TextStyle(
-                fontSize: 13,
-                letterSpacing: 2,
-                color: Colors.deepPurpleAccent,
-                fontWeight: FontWeight.bold,
+        children: [
+          const Text(
+            'BREAK THE LOOP.',
+            style: TextStyle(
+              fontSize: 13,
+              letterSpacing: 2,
+              color: Colors.deepPurpleAccent,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            'Understand your patterns.',
+            style: TextStyle(
+              fontSize: 27,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 20),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.repeat,
+                    size: 40,
+                    color: Colors.orangeAccent,
+                  ),
+                  const SizedBox(width: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${mistakes.length} recorded mistakes',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 5),
+                      const Text('Learn from every pattern.'),
+                    ],
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 10),
-            const Text(
-              'Understand your patterns.',
-              style: TextStyle(
-                fontSize: 27,
-                fontWeight: FontWeight.bold,
-              ),
+          ),
+          const SizedBox(height: 24),
+          const Text(
+            'YOUR RECENT PATTERNS',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1,
             ),
-            const SizedBox(height: 24),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.repeat,
-                      size: 40,
-                      color: Colors.orangeAccent,
-                    ),
-                    const SizedBox(width: 16),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '0 recurring mistakes',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        const SizedBox(height: 5),
-                        const Text('Every pattern starts with awareness.'),
-                      ],
-                    ),
-                  ],
+          ),
+          const SizedBox(height: 12),
+          ...mistakes.map(
+                (mistake) => Card(
+              margin: const EdgeInsets.only(bottom: 12),
+              child: ListTile(
+                leading: const CircleAvatar(
+                  child: Icon(Icons.psychology_outlined),
                 ),
-              ),
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              'YOUR RECENT PATTERNS',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1,
-              ),
-            ),
-            const SizedBox(height: 12),
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.all(28),
-                child: Column(
-                  children: [
-                    Icon(Icons.psychology_outlined, size: 52),
-                    SizedBox(height: 12),
-                    Text('No patterns recorded yet'),
-                    Text('Record your first mistake to get started.'),
-                  ],
+                title: Text(mistake['title']!),
+                subtitle: Text(
+                  '${mistake['category']}\nTrigger: ${mistake['trigger']}',
                 ),
+                isThreeLine: true,
+                trailing: const Icon(Icons.chevron_right),
               ),
             ),
-            const Spacer(),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.add),
-                label: const Text('Log a mistake'),
-              ),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              onPressed: () {},
+              icon: const Icon(Icons.add),
+              label: const Text('Log a mistake'),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
