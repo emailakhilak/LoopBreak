@@ -50,6 +50,24 @@ class _MistakeDetailScreenState extends State<MistakeDetailScreen> {
             mistake.isResolved ? 'Resolved' : 'Needs improvement',
           ),
           const SizedBox(height: 12),
+          OutlinedButton.icon(
+            onPressed: () {
+              setState(() {
+                widget.mistake.isResolved = !widget.mistake.isResolved;
+              });
+            },
+            icon: Icon(
+              widget.mistake.isResolved
+                  ? Icons.undo
+                  : Icons.check_circle_outline,
+            ),
+            label: Text(
+              widget.mistake.isResolved
+                  ? 'Mark as unresolved'
+                  : 'Mark as resolved',
+            ),
+          ),
+          const SizedBox(height: 12),
           FilledButton.icon(
             onPressed: () async {
               final original = widget.mistake;
