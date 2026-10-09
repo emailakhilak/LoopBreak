@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import '../mistake.dart';
 
-class MistakeDetailScreen extends StatelessWidget {
+class MistakeDetailScreen extends StatefulWidget {
   final Mistake mistake;
 
   const MistakeDetailScreen({super.key, required this.mistake});
 
   @override
+  State<MistakeDetailScreen> createState() => _MistakeDetailScreenState();
+}
+
+class _MistakeDetailScreenState extends State<MistakeDetailScreen> {
+  @override
   Widget build(BuildContext context) {
+    final mistake = widget.mistake;
+
     return Scaffold(
       appBar: AppBar(title: const Text('Mistake Details')),
       body: ListView(
@@ -24,6 +31,19 @@ class MistakeDetailScreen extends StatelessWidget {
           _section('Consequence', mistake.consequence),
           _section('Solution', mistake.solution),
           _section('Occurrences', '${mistake.occurrenceCount}'),
+          FilledButton.icon(
+            onPressed: () {
+              setState(() {
+                mistake.occurrenceCount++;
+              });
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Recurrence recorded!')),
+              );
+            },
+            icon: const Icon(Icons.repeat),
+            label: const Text('It happened again'),
+          ),
+          const SizedBox(height: 12),
           _section(
             'Status',
             mistake.isResolved ? 'Resolved' : 'Needs improvement',
